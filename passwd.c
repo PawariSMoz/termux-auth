@@ -18,6 +18,7 @@
 
 /** Utility for setting new password **/
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,7 +56,25 @@ static char *read_password(const char *prompt) {
     return password;
 }
 
-int main(void) {
+static int main_remove_password(void) {
+    int ret = EXIT_FAILURE;
+
+    if (termux_remove_passwd()) {
+        puts("Password login successfully disabled.");
+        ret = EXIT_SUCCESS;
+    } else {
+        if (errno == EISDIR) {
+            printf("Unexpectedly found directory where hashed password should be ("
+                   AUTH_HASH_FILE_PATH
+                   "), ignoring\n");
+        }
+        puts("Failed to disable password login.");
+    }
+
+    return ret;
+}
+
+static int main_set_password(void) {
     char *password;
     char *password_confirmation;
     int ret = EXIT_FAILURE;
@@ -93,5 +112,22 @@ int main(void) {
     free(password);
     free(password_confirmation);
 
-    return EXIT_SUCCESS;
+    return ret;
+}
+
+int main(int argc, char **argv) {
+    switch (argc) {
+    case 1:
+        return main_set_password();
+    case 2:
+        if (strcmp(argv[1], "-d") == 0 || strcmp(argv[1], "-l") == 0) {
+            return main_remove_password();
+        }
+        // otherwise, fall through
+    default:
+        fprintf(stderr,
+                "Run %s without args to set a password. Pass option -d to disable authentication credentials (lock account).\n",
+                argv[0]);
+        return EXIT_FAILURE;
+    }
 }

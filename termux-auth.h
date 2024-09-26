@@ -27,6 +27,10 @@ unsigned char *termux_passwd_hash(const char *password);
 // Return true on success, false otherwise.
 bool termux_change_passwd(const char *new_password);
 
+// Remove file that stores password hash
+// Return true on success, false otherwise.
+bool termux_remove_passwd(void);
+
 // Check validity of password (user name is ignored).
 // Return true if password is ok, otherwise return false.
 bool termux_auth(const char *user, const char *password);
