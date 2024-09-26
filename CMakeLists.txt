@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(termux-auth VERSION 1.4.1)
+project(termux-auth VERSION 1.5.0)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 include_directories(${PROJECT_SOURCE_DIR})
