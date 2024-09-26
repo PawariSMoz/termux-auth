@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.5)
 project(termux-auth VERSION 1.4.1)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
